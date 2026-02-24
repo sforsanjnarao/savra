@@ -1,10 +1,9 @@
 
 import express, { NextFunction, Request, Response } from "express";
-const router = express.Router();
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { prisma } from "@repo/db";
-router.post('/signup', async (req: Request, res: Response) => {
+export const signupController=async (req: Request, res: Response) => {
     const { email, password, role } = req.body
   
     const isUserExist=await prisma.user.findUnique({
@@ -30,9 +29,9 @@ router.post('/signup', async (req: Request, res: Response) => {
         token
     })
 
-})
+}
 
-router.post('/signin',async (req:Request, res:Response)=>{
+export const signinController=async (req:Request, res:Response)=>{
     const {email, password}=req.body
     //check if user exist or not
     const isUserExist=await prisma.user.findUnique({
@@ -54,7 +53,7 @@ router.post('/signin',async (req:Request, res:Response)=>{
         isUserExist,
         token
     })
-})
+}
 
 
 

@@ -30,6 +30,7 @@ export async function onlyTeacher(req:Request, res:Response, next:NextFunction){
             }
         )
     }
+    next()
 }
 
 export async function onlyAdmin(req:Request, res:Response, next:NextFunction){
@@ -42,4 +43,5 @@ export async function onlyAdmin(req:Request, res:Response, next:NextFunction){
             }
         )
     }
+    next()
 }
