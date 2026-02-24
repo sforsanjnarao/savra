@@ -5,8 +5,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "exports":{
-    ".":"./src/prisma"
+  "exports": {
+    ".": {
+      "types": "./src/prisma.ts",
+      "default": "./src/prisma.ts"
+    }
   },
   "keywords": [],
   "author": "",
