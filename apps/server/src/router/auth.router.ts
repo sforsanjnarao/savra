@@ -5,3 +5,4 @@ const router:express.Router=express.Router()
 
 router.post('/signup', signupController)
 router.post('/signin',signinController)
+export default router
