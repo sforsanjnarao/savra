@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import prisma from "@repo/db";
+import OpenAI from "openai";
 
 
 export async function getOverview() {
@@ -14,7 +15,7 @@ export async function getOverview() {
     }
 
     return {
-        total: grouped.reduce((sum, r) => sum + r._count.activityType, 0),
+        total: grouped.reduce((sum: number, r: any) => sum + r._count.activityType, 0),
         byType: counts,
     };
 }
@@ -95,7 +96,6 @@ export async function generateSummary(): Promise<string> {
     const apiKey = process.env.OPENAI_API_KEY;
     if (apiKey) {
         try {
-            const { default: OpenAI } = await import("openai");
             const openai = new OpenAI({ apiKey });
 
             const prompt = `You are an AI assistant for a school principal. Here is teacher activity data:\n\n${lines.join("\n")}\n\nWrite a concise 2-3 sentence insight summary highlighting standout activity, patterns, and actionable observations. Keep it professional and encouraging.`;

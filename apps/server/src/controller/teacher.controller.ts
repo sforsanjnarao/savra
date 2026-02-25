@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import prisma  from "@repo/db";
+import prisma from "@repo/db";
 
 // GET /teachers
 export async function getAllTeachers(req: Request, res: Response) {
@@ -11,14 +11,14 @@ export async function getAllTeachers(req: Request, res: Response) {
         });
 
         // groupBy only returns scalar fields — fetch teacher names via the relation
-        const teacherIds = [...new Set(grouped.map((r) => r.teacherId))];
+        const teacherIds = [...new Set(grouped.map((r: any) => r.teacherId))];
         const nameRecords = await prisma.activity.findMany({
             where: { teacherId: { in: teacherIds } },
             select: { teacherId: true, teacher: { select: { name: true } } },
             distinct: ["teacherId"],
         });
         const nameMap = new Map(
-            nameRecords.map((r) => [r.teacherId, r.teacher.name])
+            nameRecords.map((r: any) => [r.teacherId, r.teacher?.name || "Unknown"])
         );
 
         const teacherMap = new Map<
