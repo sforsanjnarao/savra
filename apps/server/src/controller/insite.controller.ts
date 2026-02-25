@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import prisma from "@repo/db";
 import OpenAI from 'openai'; 
+// import type { OpenAI } from 'openai';
+
 
 
 export async function getOverview() {
@@ -96,7 +98,9 @@ export async function generateSummary(): Promise<string> {
     const apiKey = process.env.OPENAI_API_KEY;
     if (apiKey) {
         try {
-            const openai = new OpenAI({ apiKey })
+            const openai = new OpenAI({ apiKey
+                // @ts-ignore for Vercel path issue
+             })
 
             const prompt = `You are an AI assistant for a school principal. Here is teacher activity data:\n\n${lines.join("\n")}\n\nWrite a concise 2-3 sentence insight summary highlighting standout activity, patterns, and actionable observations. Keep it professional and encouraging.`;
 
