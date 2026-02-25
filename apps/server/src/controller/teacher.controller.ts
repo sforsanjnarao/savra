@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { prisma } from "@repo/db";
+import prisma  from "@repo/db";
 
 // GET /teachers
 export async function getAllTeachers(req: Request, res: Response) {

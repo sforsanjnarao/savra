@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { prisma } from "@repo/db";
+import prisma from "@repo/db";
 
 
 export async function getOverview() {
@@ -83,15 +83,41 @@ export async function generateSummary(): Promise<string> {
         teacherMap.get(row.teacherId)![row.activityType] = row._count.activityType;
     }
 
-    const lines: string[] = ["Teacher Activity Summary:"];
+    const lines: string[] = [];
     for (const [teacherId, types] of teacherMap.entries()) {
         const breakdown = Object.entries(types)
             .map(([type, count]) => `${count} ${type.toLowerCase()}(s)`)
             .join(", ");
-        lines.push(`- Teacher ${teacherId}: ${breakdown}`);
+        lines.push(`Teacher ${teacherId}: ${breakdown}`);
     }
 
-    return lines.join("\n");
+    // Try OpenAI — fall back to plain text if key not set
+    const apiKey = process.env.OPENAI_API_KEY;
+    if (apiKey) {
+        try {
+            const { default: OpenAI } = await import("openai");
+            const openai = new OpenAI({ apiKey });
+
+            const prompt = `You are an AI assistant for a school principal. Here is teacher activity data:\n\n${lines.join("\n")}\n\nWrite a concise 2-3 sentence insight summary highlighting standout activity, patterns, and actionable observations. Keep it professional and encouraging.`;
+
+            const completion = await openai.chat.completions.create({
+                model: "gpt-4o-mini",
+                messages: [{ role: "user", content: prompt }],
+                max_tokens: 200,
+                temperature: 0.7,
+            });
+
+            return completion.choices[0]?.message?.content ?? fallbackSummary(lines);
+        } catch (err) {
+            console.error("OpenAI error:", err);
+        }
+    }
+
+    return fallbackSummary(lines);
+}
+
+function fallbackSummary(lines: string[]): string {
+    return ["Teacher Activity Summary:", ...lines.map((l) => `- ${l}`)].join("\n");
 }
 
 export async function getAiSummaryController(req: Request, res: Response) {

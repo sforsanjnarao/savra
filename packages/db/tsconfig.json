@@ -1,7 +1,17 @@
 {
-  "extends": "@repo/typescript-config/nextjs.json",
+  "extends": "@repo/typescript-config/base.json",
   "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "outDir": "dist",
     "rootDir": "./",
-    "outDir": "./dist"
-  }
+    "skipLibCheck": true,
+    "noEmit": false
+  },
+  "include": [
+    "src/**/*",
+    "generated/**/*"
+  ]
 }

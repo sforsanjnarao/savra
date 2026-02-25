@@ -1,9 +1,9 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import insitesRouter from "./router/insites.router";
-import teacherRouter from "./router/teacher.routes";
-import authRouter from "./router/auth.router";
+import insitesRouter from "./router/insites.router.js";
+import teacherRouter from "./router/teacher.routes.js";
+import authRouter from "./router/auth.router.js";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
